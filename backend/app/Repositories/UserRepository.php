@@ -6,8 +6,8 @@ use App\Models\User;
 
 class UserRepository
 {
-    public function get($id){
-        return User::find($id);
+    public function get($email){
+        return User::where('email',$email)->first();
     }
 
     public function create(array $data){

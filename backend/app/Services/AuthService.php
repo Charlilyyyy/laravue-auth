@@ -2,12 +2,38 @@
 
 namespace App\Services;
 use App\Services\UserService;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService{
-    public function __construct(protected UserService $userService){
+    public function __construct(
+        protected UserService $userService,
+        protected UserRepository $userRepository){
     }
 
-    public function registerUser(array $data){
+    public function register(array $data){
         return $this->userService->addUser($data);
+    }
+
+    public function login(array $data){
+
+        $user = $this->userRepository->get($data['email']);
+
+        if(!$user) {
+            return response()->json([
+                'message' => 'User Not Found'
+            ], 404);
+        }
+
+        if($data['email'] != $user->email || !Hash::check($data['password'],$user->password)){
+            return response()->json([
+                'message' => 'Wrong Credentials'
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'Login Succeeded',
+            'data' => $this->userRepository->get($data['email'])
+        ]);
     }
 }

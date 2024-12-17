@@ -5,11 +5,6 @@ import LoginView from '../pages/auth/Login.vue'
 import RegisterView from '../pages/auth/Register.vue'
 import { useUserStore } from '../store/user'
 
-function isAuthenticated(): boolean {
-    // Replace this with your actual authentication logic
-    return !!localStorage.getItem('authToken');
-}
-
 const router = createRouter({
 //   history: createWebHistory(),
   history: createWebHistory(import.meta.env.BASE_URL),

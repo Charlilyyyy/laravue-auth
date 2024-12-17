@@ -11,9 +11,7 @@ const userStore = useUserStore();
 
 async function handleSubmit() :Promise<void>{
     try {
-        // const response :Promise<any> = userStore.login(user);
-        // const result = await response;
-        // console.log('result');
+        // const result :Promise<any> = await userStore.login(user);
         const result = await userStore.login(user);
         console.log('Login successful:', result);
     } catch (error) {

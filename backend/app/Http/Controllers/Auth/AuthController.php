@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\LogoutRequest;
 use App\Services\AuthService;
 
 class AuthController extends Controller
@@ -24,9 +25,16 @@ class AuthController extends Controller
     public function login(LoginRequest $request){
         $validatedData = $request->validated();
         $user = $this->authService->login($validatedData);
-        // \Log::info($user);
         return response()->json([
             'login' => $user
+        ],200);
+    }
+
+    public function logout(LogoutRequest $request){
+        $validatedData = $request->validated();
+        $user = $this->authService->logout($request);
+        return response()->json([
+            'message' => 'Successfully Logged Out'
         ],200);
     }
 }

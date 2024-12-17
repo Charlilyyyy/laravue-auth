@@ -39,4 +39,15 @@ class AuthService{
             'token' => $token,
         ]);
     }
+
+    public function logout($data)
+    {
+        $user = $this->userRepository->get($data['email']);
+        $user->tokens->each(function ($token) {
+            $token->delete();
+        });
+        return response()->json([
+            'message' => 'Logout Successful',
+        ]);
+    }
 }

@@ -24,6 +24,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request){
         $validatedData = $request->validated();
         $user = $this->authService->login($validatedData);
+        // \Log::info($user);
         return response()->json([
             'login' => $user
         ],200);

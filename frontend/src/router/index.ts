@@ -3,7 +3,7 @@ import HomeView from '../pages/Home.vue'
 import DashboardView from '../pages/auth/Dashboard.vue'
 import LoginView from '../pages/auth/Login.vue'
 import RegisterView from '../pages/auth/Register.vue'
-
+import { useUserStore } from '../store/user'
 
 function isAuthenticated(): boolean {
     // Replace this with your actual authentication logic
@@ -23,13 +23,14 @@ const router = createRouter({
         path: '/dashboard',
         name: 'dashboard',
         component: DashboardView,
-        beforeEnter: (to :any, from :any, next :any) => {
-            if (!isAuthenticated()) {
-              next('/login'); // Redirect to login if not authenticated
-            } else {
-              next(); // Allow access if authenticated
-            }
-          },
+        meta: { requiresAuth: true } 
+        // beforeEnter: (to :any, from :any, next :any) => {
+        //     if (!isAuthenticated()) {
+        //       next('/login'); // Redirect to login if not authenticated
+        //     } else {
+        //       next(); // Allow access if authenticated
+        //     }
+        //   },
       },
       {
         path: '/login',
@@ -64,5 +65,19 @@ const router = createRouter({
 //       next();
 //     }
 //   });
+
+// Global Navigation Guard
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('auth_token'); // Retrieve the token
+  const userStore = useUserStore();
+  const userToken = userStore.token;
+
+  if (to.meta.requiresAuth && (!token || userToken != token)) {
+      // If route requires auth and no token, redirect to login
+      next({ name: 'Login' });
+  } else {
+      next(); // Proceed as normal
+  }
+});
 
 export default router

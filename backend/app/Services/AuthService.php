@@ -31,9 +31,12 @@ class AuthService{
             ], 500);
         }
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
             'message' => 'Login Succeeded',
-            'data' => $this->userRepository->get($data['email'])
+            'data' => $this->userRepository->get($data['email']),
+            'token' => $token,
         ]);
     }
 }
